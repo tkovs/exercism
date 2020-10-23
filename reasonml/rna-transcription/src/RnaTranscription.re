@@ -1,14 +1,5 @@
-type dna =
-  | A
-  | C
-  | G
-  | T
-
-type rna =
-  | A
-  | C
-  | G
-  | U
+type dna =  | A | C | G | T
+type rna = | A | C | G | U
 
 let toRnaNucleotides = (dna: dna) =>
   switch dna {
