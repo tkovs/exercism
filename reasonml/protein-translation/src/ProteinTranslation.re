@@ -1,4 +1,4 @@
-let rnaToProtein = (rna: string): string =>
+let toProtein = (rna: string): string =>
   switch rna {
   | "AUG" => "Methionine"
   | "UUU" | "UUC" => "Phenylalanine"
@@ -11,28 +11,9 @@ let rnaToProtein = (rna: string): string =>
   | otherwise => otherwise
   }
 
-let rec rnasStringToList = (rnas: string): list(string) => {
-  let head = Js.String2.slice(rnas, ~from=0, ~to_=3)
-  let tail = Js.String2.sliceToEnd(rnas, ~from=3)
-
-  switch rnas {
-  | "" => []
-  | _ => [head, ...rnasStringToList(tail)]
+let rec proteins = str =>
+  switch (String.sub(str, 0, 3) |> toProtein) {
+  | exception Invalid_argument(_) => []
+  | "STOP" => []
+  | protein => [protein, ...proteins(String.sub(str, 3, String.length(str) - 3))]
   }
-}
-
-let rec rnasToProteins = (rnas: list(string)): list(string) =>
-  switch rnas {
-  | [] => []
-  | [rna, ...tail] =>
-    if (rnaToProtein(rna) === "STOP") {
-      []
-    } else {
-      [rnaToProtein(rna), ...rnasToProteins(tail)]
-    }
-  }
-
-let proteins = protein =>
-  protein
-  |> rnasStringToList 
-  |> rnasToProteins
