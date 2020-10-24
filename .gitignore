@@ -4,3 +4,6 @@ node_modules
 .merlin
 *.bs.js
 .bsb.lock
+*.cmi
+*.cmj
+*.cmt
