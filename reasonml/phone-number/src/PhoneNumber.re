@@ -1,22 +1,7 @@
-let phoneNumber = number => {
-    switch (number |> Js.String.match([%re "/\d+/g"])) {
-        | Some (result) => {
-            let cleaned = Js.Array.joinWith("", result)
+let phoneNumber = phone => {
+  let filterNumbers = Js.String.replaceByRe([%re "/[^0-9]/g"], "");
+  let matchPhoneNumber =
+    Js.String.match([%re "/^1?((?:[2-9][0-9]{2}){2}[0-9]{4})$/"]);
 
-            if (Js.String.length(cleaned) === 10) {
-                if (Js.String.charAt(0, cleaned) === "0" || Js.String.charAt(0, cleaned) === "1"){
-                    None
-                } else if (Js.String.charAt(3, cleaned) === "0" || Js.String.charAt(3, cleaned) === "1"){
-                    None
-                } else {
-                    Some(cleaned)
-                }
-            } else if (Js.String.length(cleaned) === 11 && Js.String.startsWith("1", cleaned)) {
-                Some(Js.String.substringToEnd(~from=1, cleaned))
-            } else {
-                None
-            }
-        }
-        | None => None
-    }
-}
+  (phone |> filterNumbers |> matchPhoneNumber)->(Belt.Option.map(r => r[1]));
+};
